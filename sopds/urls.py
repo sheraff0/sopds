@@ -28,3 +28,7 @@ urlpatterns = [
     #url(r'^', include('sopds_web_backend.urls', namespace='web', app_name='opds_web_backend')),
     url(r'^$', RedirectView.as_view(url=reverse_lazy("web:main"))),
 ]
+
+
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+urlpatterns += staticfiles_urlpatterns()

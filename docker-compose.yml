@@ -1,0 +1,24 @@
+services:
+  web:
+    build: .
+    volumes:
+      - ./run:/run
+    env_file:
+      - .env
+    depends_on:
+      - db
+    container_name: sopds_web
+    ports:
+      - "8011:8000"
+    command:
+      - /run/web.sh
+
+  db:
+    image: postgres:17
+    container_name: sopds_db
+    env_file:
+      - .env.pgsql
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"

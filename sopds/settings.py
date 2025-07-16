@@ -14,7 +14,7 @@ import os
 import sys
 from collections import OrderedDict
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -80,6 +80,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'sopds.wsgi.application'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 #### SOPDS DATABASE SETTINGS START ####
 
@@ -100,23 +101,23 @@ WSGI_APPLICATION = 'sopds.wsgi.application'
 #    }             
 #}
 
-#DATABASES = {
-#    'default': {
-#    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#    'NAME': 'sopds',
-#    'USER': 'sopds',
-#    'PASSWORD': 'sopds',
-#    'HOST': '', # Set to empty string for localhost.
-#    'PORT': '', # Set to empty string for default.
-#    }
-#}
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }         
+   'default': {
+   'ENGINE': 'django.db.backends.postgresql',
+   'NAME': 'sopds',
+   'USER': 'sopds',
+   'PASSWORD': 'sopds',
+   'HOST': 'db', # Set to empty string for localhost.
+   'PORT': '', # Set to empty string for default.
+   }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
 
 #### SOPDS DATABASE SETTINGS FINISH ####
 
@@ -156,7 +157,7 @@ CACHE_MIDDLEWARE_KEY_PREFIX = "sopds"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATIC_URL = '/static/'
-STATIC_ROOT = 'static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 
@@ -169,7 +170,8 @@ CONSTANCE_ADDITIONAL_FIELDS = {
 
 CONSTANCE_CONFIG = OrderedDict([
     ('SOPDS_LANGUAGE', ('en-US',_('Select language'),'language_select')),    
-    ('SOPDS_ROOT_LIB', ('books/',_('Absolute path to books collection directory'))),
+    ('SOPDS_ROOT_LIB', (os.environ.get("SOPDS_ROOT_LIB",  'books/'),
+                        _('Absolute path to books collection directory'))),
     ('SOPDS_BOOK_EXTENSIONS', ('.pdf .djvu .fb2 .epub .mobi', _('List of managed book files extensions'))),
     ('SOPDS_SCAN_START_DIRECTLY', (False,_('Turn once scanning directly'))),
     ('SOPDS_CACHE_TIME', (1200, _('Pages cache time'))),
