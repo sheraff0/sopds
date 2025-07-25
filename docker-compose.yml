@@ -3,11 +3,13 @@ services:
     build: .
     volumes:
       - ./run:/run
+      - /home/alexiz/media/Data2/Books:/books
     env_file:
       - .env
     depends_on:
       - db
     container_name: sopds_web
+    restart: always
     ports:
       - "8011:8000"
     command:
@@ -16,6 +18,7 @@ services:
   db:
     image: postgres:17
     container_name: sopds_db
+    restart: always
     env_file:
       - .env.pgsql
     volumes:
